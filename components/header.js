@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -18,7 +19,13 @@ const Header = () => {
       <div id="navbar" className="p-4 bg-gray-50 shadow">
         <div className="flex mx-auto justify-between w-48 items-center">
           <i class="fas fa-users fa-2x text-purple-600"></i>
-          <h2 className="text-3xl font-display text-purple-600">CrowdCoin</h2>
+          <Link href="/">
+            <a>
+              <h2 className="text-3xl font-display text-purple-600">
+                CrowdCoin
+              </h2>
+            </a>
+          </Link>
         </div>
       </div>
     </div>

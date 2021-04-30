@@ -5,7 +5,6 @@ import Layout from "../components/layout";
 import Link from "next/link";
 
 export async function getStaticProps() {
-  const accounts = await web3.eth.getAccounts();
   const campaigns = await factory.methods.getDeployedCampaigns().call();
   return {
     props: {
@@ -20,26 +19,41 @@ class Home extends React.Component {
       return (
         <div className="mt-3 p-3 flex justify-between shadow rounded items-center bg-gray-50">
           <div className="flex flex-col ml-3">
-            <p>Description</p>
-            <p>Campaign address {addr}</p>
+            <p>
+              Campaign address <span className="font-bold">{addr}</span>
+            </p>
+            <Link href={`/${addr}`}>
+              <a className="text-sm text-blue-600">View Campaign</a>
+            </Link>
           </div>
-          <button className="py-0 px-2 bg-purple-600 text-white rounded h-9 mr-3 shadow">
-            View Details
-          </button>
+          <Link href={`/${addr}`}>
+            <a>
+              <button className="py-0 px-2 bg-purple-600 text-white rounded h-9 mr-3 shadow">
+                View Details
+              </button>
+            </a>
+          </Link>
         </div>
       );
     });
   };
   render() {
     return (
-      <div className="h-screen bg-gray-100">
-        <Layout>
-          <div className="p-5">
+      <Layout>
+        <div className="p-5">
+          <div className="flex">
             <p className="text-lg font-serif">Running Campaigns</p>
-            {this.renderCampaigns()}
+            <Link href={`/new`}>
+              <a>
+                <button className="ml-4 bg-green-500 py-1 px-2 text-white rounded shadow">
+                  Create New
+                </button>
+              </a>
+            </Link>
           </div>
-        </Layout>
-      </div>
+          {this.renderCampaigns()}
+        </div>
+      </Layout>
     );
   }
 }
