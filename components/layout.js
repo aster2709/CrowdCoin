@@ -3,7 +3,7 @@ import Header from "./header";
 
 const Layout = (props) => {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100 relative">
       <Header></Header>
       {props.children}
     </div>
