@@ -1,8 +1,9 @@
 import { withRouter } from "next/router";
 import React from "react";
-import Campaign from "../ethereum/campaign";
-import Layout from "../components/layout";
+import Campaign from "../../ethereum/campaign";
+import Layout from "../../components/layout";
 import Link from "next/link";
+import web3 from "../../ethereum/web3";
 
 class Details extends React.Component {
   state = {
@@ -26,6 +27,7 @@ class Details extends React.Component {
     });
   }
   render() {
+    const address = this.props.router.query.address;
     const items = [
       {
         title: "Manager",
@@ -50,7 +52,7 @@ class Details extends React.Component {
       },
       {
         title: "Total Funded",
-        desc: this.state.balance,
+        desc: web3.utils.fromWei(this.state.balance, "ether"),
         meta: "Total amount funded for this campaign",
       },
     ];
@@ -70,15 +72,27 @@ class Details extends React.Component {
             ))}
           </div>
           <div className="flex flex-col">
-            <button className="py-0 px-2 bg-green-600 text-white rounded h-9 mr-3 shadow mt-4">
-              Contribute
-            </button>
-            <button className="py-0 px-2 bg-purple-600 text-white rounded h-9 mr-3 shadow mt-4">
-              View Requests
-            </button>
-            <button className="py-0 px-2 bg-yellow-400 text-white rounded h-9 mr-3 shadow mt-4">
-              Create Request
-            </button>
+            <Link href={`/${address}/contribute`}>
+              <a>
+                <button className="text-center w-36 py-0 px-2 bg-green-600 text-white rounded h-9 mr-3 shadow mt-4">
+                  Contribute
+                </button>
+              </a>
+            </Link>
+            <Link href={`/${address}/contribute`}>
+              <a>
+                <button className="text-center w-36 py-0 px-2 bg-purple-600 text-white rounded h-9 mr-3 shadow mt-4">
+                  View Requests
+                </button>
+              </a>
+            </Link>
+            <Link href={`/${address}/contribute`}>
+              <a>
+                <button className="text-center w-36 py-0 px-2 bg-yellow-400 text-white rounded h-9 mr-3 shadow mt-4">
+                  Create Request
+                </button>
+              </a>
+            </Link>
           </div>
         </div>
       </Layout>

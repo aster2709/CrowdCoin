@@ -1,13 +1,13 @@
 import React from "react";
-import Layout from "../components/layout";
-import factory from "../ethereum/factory";
-import web3 from "../ethereum/web3";
+import { withRouter } from "next/router";
+import Layout from "../../components/layout";
+import Campaign from "../../ethereum/campaign";
+import web3 from "../../ethereum/web3";
 import Link from "next/link";
 
-class NewCampaign extends React.Component {
+class Contribute extends React.Component {
   state = {
-    minimumContribution: "",
-    title: "",
+    value: "",
     errorMessage: "",
     loading: false,
   };
@@ -15,10 +15,13 @@ class NewCampaign extends React.Component {
     e.preventDefault();
     const accounts = await web3.eth.getAccounts();
     this.setState({ errorMessage: "", loading: true });
+    const { address } = this.props.router.query;
+    const campaign = Campaign(address);
     try {
-      await factory.methods
-        .createCampaign(this.state.minimumContribution)
-        .send({ from: accounts[0] });
+      await campaign.methods.contribute().send({
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.value, "ether"),
+      });
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -39,32 +42,19 @@ class NewCampaign extends React.Component {
             onSubmit={this.handleSubmit}
           >
             <div className="mb-4">
-              <p className="font-semibold text-lg">Create a new campaign</p>
+              <p className="font-semibold text-lg">Contribute to campaign</p>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Campaign Title</label>
+              <label className="block mb-2">Amount</label>
               <input
                 required
-                value={this.state.title}
-                onChange={(e) => this.setState({ title: e.target.value })}
+                value={this.state.value}
+                onChange={(e) => this.setState({ value: e.target.value })}
                 type="text"
                 className="py-1 px-2 w-full border-2 border-gray-500 rounded-lg outline-none"
-                placeholder="Value in Wei"
+                placeholder="in Ether"
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-2">Minimum Contribution</label>
-              <input
-                value={this.state.minimumContribution}
-                onChange={(e) =>
-                  this.setState({ minimumContribution: e.target.value })
-                }
-                type="text"
-                className="py-1 px-2 w-full border-2 border-gray-500 rounded-lg outline-none"
-                placeholder="Value in Wei"
-              />
-            </div>
-
             {!!this.state.errorMessage ? (
               <div className="flex flex-col rounded bg-red-200 p-3 text-red-700 mb-4">
                 <p className="text-lg font-semibold">Oops!</p>
@@ -83,5 +73,4 @@ class NewCampaign extends React.Component {
     );
   }
 }
-
-export default NewCampaign;
+export default withRouter(Contribute);
