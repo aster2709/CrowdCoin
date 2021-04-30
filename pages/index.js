@@ -26,13 +26,22 @@ class Home extends React.Component {
               <a className="text-sm text-blue-600">View Campaign</a>
             </Link>
           </div>
-          <Link href={`/${addr}`}>
-            <a>
-              <button className="py-0 px-2 bg-purple-600 text-white rounded h-9 mr-3 shadow">
-                View Details
-              </button>
-            </a>
-          </Link>
+          <div className="flex justify-between">
+            <Link href={`/${addr}/contribute`}>
+              <a>
+                <button className="py-0 px-2 bg-green-500 text-white rounded-lg h-9 mr-3 shadow">
+                  Contribute
+                </button>
+              </a>
+            </Link>
+            <Link href={`/${addr}`}>
+              <a>
+                <button className="py-0 px-2 bg-purple-600 text-white rounded-lg h-9 mr-3 shadow">
+                  View Details
+                </button>
+              </a>
+            </Link>
+          </div>
         </div>
       );
     });
