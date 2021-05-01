@@ -1,5 +1,6 @@
 import web3 from "./web3";
-import { abi } from "./build/Campaign.json";
+import jsonObj from "./build/Campaign.json";
+const { abi } = jsonObj;
 function Campaign(addr) {
   return new web3.eth.Contract(abi, addr);
 }

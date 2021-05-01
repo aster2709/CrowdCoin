@@ -1,32 +1,37 @@
 import React from "react";
-import Layout from "../../components/Layout";
-import Campaign from "../../ethereum/campaign";
-import web3 from "../../ethereum/web3";
+import Layout from "../../../components/Layout";
+import Campaign from "../../../ethereum/campaign";
+import web3 from "../../../ethereum/web3";
 import Link from "next/link";
 
 export async function getServerSideProps(context) {
-  const addr = context.params.address;
   return {
-    props: { addr },
+    props: {
+      addr: context.params.address,
+    },
   };
 }
-class Contribute extends React.Component {
+
+class NewRequest extends React.Component {
   state = {
-    value: "",
+    desc: "",
+    amount: "",
+    recipient: "",
     errorMessage: "",
     loading: false,
   };
   handleSubmit = async (e) => {
     e.preventDefault();
     const accounts = await web3.eth.getAccounts();
-    const { addr } = this.props;
-    const campaign = Campaign(addr);
     this.setState({ errorMessage: "", loading: true });
+    const campaign = Campaign(this.props.addr);
+    const { desc, amount, recipient } = this.state;
     try {
-      await campaign.methods.contribute().send({
-        from: accounts[0],
-        value: web3.utils.toWei(this.state.value, "ether"),
-      });
+      await campaign.methods
+        .createRequest(desc, web3.utils.toWei(amount, "ether"), recipient)
+        .send({
+          from: accounts[0],
+        });
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -47,17 +52,37 @@ class Contribute extends React.Component {
             onSubmit={this.handleSubmit}
           >
             <div className="mb-4">
-              <p className="font-semibold text-lg">Contribute to campaign</p>
+              <p className="font-semibold text-lg">Create Request</p>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Description</label>
+              <input
+                required
+                value={this.state.desc}
+                onChange={(e) => this.setState({ desc: e.target.value })}
+                type="text"
+                className="py-1 px-2 w-full border-2 border-gray-500 rounded-lg outline-none"
+              />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Amount</label>
               <input
                 required
-                value={this.state.value}
-                onChange={(e) => this.setState({ value: e.target.value })}
+                value={this.state.amount}
+                onChange={(e) => this.setState({ amount: e.target.value })}
                 type="text"
                 className="py-1 px-2 w-full border-2 border-gray-500 rounded-lg outline-none"
-                placeholder="in Ether"
+                placeholder="in ether"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Recipient address</label>
+              <input
+                required
+                value={this.state.recipient}
+                onChange={(e) => this.setState({ recipient: e.target.value })}
+                type="text"
+                className="py-1 px-2 w-full border-2 border-gray-500 rounded-lg outline-none"
               />
             </div>
             {!!this.state.errorMessage ? (
@@ -78,4 +103,4 @@ class Contribute extends React.Component {
     );
   }
 }
-export default Contribute;
+export default NewRequest;
