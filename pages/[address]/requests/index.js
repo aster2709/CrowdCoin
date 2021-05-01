@@ -1,34 +1,35 @@
 import React from "react";
 import Campaign from "../../../ethereum/campaign";
-import Box from "../../../components/box";
-import Layout from "../../../components/Layout";
-import { withRouter } from "next/router";
+import RequestList from "../../../components/RequestList";
 
-class ViewRequests extends React.Component {
-  state = {
-    errorMessage: "",
+export const getServerSideProps = async (context) => {
+  const addr = context.params.address;
+  const campaign = Campaign(addr);
+  const requestCount = await campaign.methods.getRequestCount().call();
+  const approverCount = await campaign.methods.approverCount().call();
+  const requests = await Promise.all(
+    Array(requestCount)
+      .fill()
+      .map((request, index) => campaign.methods.requests(index).call())
+  );
+  console.log(requests);
+  return {
+    props: {
+      approverCount: approverCount,
+      requests: JSON.stringify(requests),
+      addr: addr,
+    },
   };
-  anything = async () => {
-    const { address } = this.props.router.query;
-    const campaign = Campaign(address);
-    console.log(address);
-    const requestCount = await campaign.methods.getRequestCount().call();
-    console.log(requestCount);
-    const requests = await Promise.all(
-      Array(+requestCount)
-        .fill()
-        .map((x, i) => {
-          return campaign.methods.requests(i).call();
-        })
-    );
-    console.log(requests);
-    return requests.map((request, id) => {
-      return <Box key={id} request={request} id={id} />;
-    });
-  };
-  render() {
-    return <Layout>{this.anything()}</Layout>;
-  }
-}
+};
 
-export default withRouter(ViewRequests);
+const ViewRequests = ({ requests, approverCount, addr }) => (
+  <div>
+    <RequestList
+      requests={JSON.parse(requests)}
+      approverCount={approverCount}
+      addr={addr}
+    />
+  </div>
+);
+
+export default ViewRequests;

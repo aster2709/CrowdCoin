@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import Link from "next/link";
 import CampaignList from "../components/CampaignList";
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const campaigns = await factory.methods.getDeployedCampaigns().call();
   return {
     props: {

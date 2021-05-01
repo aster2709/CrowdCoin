@@ -10,11 +10,6 @@ const Header = () => {
           src="https://kit.fontawesome.com/b4d52cbeba.js"
           crossorigin="anonymous"
         ></script>
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Rochester&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <div id="navbar" className="p-4 bg-gray-50 shadow">
         <div className="flex mx-auto justify-between w-48 items-center">
