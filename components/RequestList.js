@@ -5,7 +5,7 @@ class RequestList extends React.Component {
   render() {
     const { requests, approverCount, addr } = this.props;
     return (
-      <div className="flex flex-wrap w-3/4">
+      <div className="flex flex-wrap w-4/5 justify-center">
         {requests.map((request, index) => (
           <RequestBox
             key={index}

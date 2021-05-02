@@ -3,6 +3,7 @@ import Campaign from "../../ethereum/campaign";
 import Link from "next/link";
 import web3 from "../../ethereum/web3";
 import SummaryList from "../../components/SummaryList";
+import Back from "../../components/Back";
 
 export async function getServerSideProps(context) {
   const campaign = Campaign(context.params.address);
@@ -18,6 +19,7 @@ export async function getServerSideProps(context) {
     },
   };
 }
+
 class Details extends React.Component {
   render() {
     const {
@@ -58,9 +60,7 @@ class Details extends React.Component {
     ];
     return (
       <div>
-        <Link href="/">
-          <a className="text-blue-400 underline ml-7">Back</a>
-        </Link>
+        <Back />
         <div className="flex p-3">
           <SummaryList items={items} />
           <div className="flex flex-col">

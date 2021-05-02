@@ -1,8 +1,8 @@
 import React from "react";
-import Layout from "../components/layout";
 import factory from "../ethereum/factory";
 import web3 from "../ethereum/web3";
 import Link from "next/link";
+import Back from "../components/Back";
 
 class NewCampaign extends React.Component {
   state = {
@@ -14,6 +14,7 @@ class NewCampaign extends React.Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const accounts = await web3.eth.getAccounts();
+    console.log(accounts);
     this.setState({ errorMessage: "", loading: true });
     try {
       await factory.methods
@@ -26,13 +27,11 @@ class NewCampaign extends React.Component {
   };
   render() {
     return (
-      <Layout>
+      <div>
+        <Back />
         {this.state.loading ? (
           <p className="text-2xl p-5">⌛Transaction ongoing, please wait</p>
         ) : null}
-        <Link href="/">
-          <a className="text-blue-400 underline ml-5">Back</a>
-        </Link>
         <div className="p-5">
           <form
             className="bg-white p-4 shadow-md rounded w-1/3"
@@ -79,7 +78,7 @@ class NewCampaign extends React.Component {
             </button>
           </form>
         </div>
-      </Layout>
+      </div>
     );
   }
 }
