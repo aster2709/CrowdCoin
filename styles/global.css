@@ -6,3 +6,6 @@ body {
 #navbar {
   font-family: "Rochester";
 }
+#navbar span {
+  font-family: "Courier New", Courier, monospace;
+}
