@@ -38,14 +38,14 @@ class RequestBox extends React.Component {
     return (
       <div
         className={`shadow border-2 rounded-md ${
-          request.complete ? `border-green-400` : `border-purple-400`
-        } p-3 m-3 flex flex-col justify-around w-1/2`}
+          request.completed ? `border-gray-500` : `border-purple-400`
+        } p-3 m-3 flex flex-col justify-around w-2/5`}
       >
         {this.state.loading ? (
-          <p className="text-2xl p-5">⌛Transaction ongoing, please wait</p>
+          <p className="text-2xl">⌛Transaction ongoing, please wait</p>
         ) : null}
         {!!this.state.errorMessage ? (
-          <div className="flex flex-col rounded bg-red-200 p-3 text-red-700 mb-4 break-words">
+          <div className="flex flex-col rounded bg-red-100 p-3 text-red-700 mb-4 overflow-hidden">
             <p className="text-lg font-semibold">Oops!</p>
             <p className="text-sm">{this.state.errorMessage}</p>
           </div>
@@ -57,17 +57,21 @@ class RequestBox extends React.Component {
           </p>
           <button
             onClick={this.handleFinalize}
-            className="bg-blue-600 rounded-lg shadow py-1 px-2 text-white font-md hover:bg-blue-800"
+            className={`${
+              request.completed
+                ? `bg-gray-500 pointer-events-none`
+                : `bg-blue-600`
+            } rounded-lg shadow py-1 px-2 text-white font-md`}
           >
-            Finalize
+            {request.completed ? `Completed` : `Finalize`}
           </button>
         </div>
-
+        <p>{request.complete}</p>
         <p className="text-2xl font-semibold text-gray-800">{request.desc}</p>
         <p>{web3.utils.fromWei(request.amount, "ether")} ETH</p>
-        <p className="bg-red-200 shadow-lg rounded-lg border-1 border-red-400 py-1 px-2 text-center">
+        <div className="bg-red-200 shadow-lg rounded-lg border-1 border-red-400 py-1 px-2 text-center">
           {request.recipient}
-        </p>
+        </div>
         <p className="font-md text-gray-800">
           Approve count:{" "}
           <span className="text-lg">
@@ -76,7 +80,11 @@ class RequestBox extends React.Component {
         </p>
         <button
           onClick={this.handleApprove}
-          className="bg-green-600 hover:bg-green-700 rounded-lg shadow py-1 px-2 text-white font-md"
+          className={`hover:bg-purple-700 rounded-lg shadow py-1 px-2 text-white font-md ${
+            request.completed
+              ? `pointer-events-none bg-gray-500`
+              : `bg-purple-600`
+          }`}
         >
           Approve
         </button>

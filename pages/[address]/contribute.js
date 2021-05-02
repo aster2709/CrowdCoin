@@ -3,6 +3,7 @@ import Layout from "../../components/Layout";
 import Campaign from "../../ethereum/campaign";
 import web3 from "../../ethereum/web3";
 import Link from "next/link";
+import Back from "../../components/Back";
 
 export async function getServerSideProps(context) {
   const addr = context.params.address;
@@ -38,9 +39,7 @@ class Contribute extends React.Component {
         {this.state.loading ? (
           <p className="text-2xl p-5">⌛Transaction ongoing, please wait</p>
         ) : null}
-        <Link href="/">
-          <a className="text-blue-400 underline ml-5">Back</a>
-        </Link>
+        <Back />
         <div className="p-5">
           <form
             className="bg-white p-4 shadow-md rounded w-1/3"
